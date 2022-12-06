@@ -1,4 +1,4 @@
-use actix_web::{App, HttpServer, Responder};
+use actix_web::{middleware::Logger, App, HttpServer, Responder};
 
 #[actix_web::get("/{message}")]
 async fn echo(message: actix_web::web::Path<String>) -> impl Responder {
@@ -7,8 +7,8 @@ async fn echo(message: actix_web::web::Path<String>) -> impl Responder {
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().service(echo))
-        .bind(("0.0.0.0", 8080))?
-        .run()
-        .await
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+
+    let app = || App::new().service(echo).wrap(Logger::default());
+    HttpServer::new(app).bind(("0.0.0.0", 8080))?.run().await
 }
