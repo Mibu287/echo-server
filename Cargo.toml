@@ -11,7 +11,7 @@ name = "dummy"
 
 [[bin]]
 path = "./src/main.rs"
-name = "server"
+name = "echo-server"
 
 [dependencies]
 actix-web = "4.2"
